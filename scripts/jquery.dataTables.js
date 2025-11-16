@@ -11828,7 +11828,15 @@
 		 */
 		"html-pre": function ( a )
 		{
-			return a.replace( /<.*?>/g, "" ).toLowerCase();
+			if (typeof a !== "string") {
+				a = (a !== null && a.toString) ? a.toString() : '';
+			}
+			let previous;
+			do {
+				previous = a;
+				a = a.replace(/<.*?>/g, "");
+			} while (a !== previous);
+			return a.toLowerCase();
 		},
 		
 		"html-asc": function ( x, y )
