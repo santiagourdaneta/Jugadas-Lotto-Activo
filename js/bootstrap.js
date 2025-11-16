@@ -1753,6 +1753,18 @@
     this.highlighter = this.options.highlighter || this.highlighter
     this.updater = this.options.updater || this.updater
     this.source = this.options.source
+    // Warn in development if potentially unsafe menu HTML is passed
+    if (
+      typeof this.options.menu === 'string' &&
+      /^\s*</.test(this.options.menu)
+    ) {
+      // If running in development mode, you might log or throw
+      if (window && window.console && window.console.warn) {
+        console.warn(
+          'Typeahead plugin: The `menu` option is interpreted as HTML. You are responsible for sanitizing it to avoid XSS.'
+        );
+      }
+    }
     this.$menu = $(this.options.menu)
     this.shown = false
     this.listen()
@@ -2009,6 +2021,11 @@
     })
   }
 
+  /**
+   * The `menu` option is injected as HTML via jQuery.
+   * WARNING: If you override `menu`, you MUST sanitize input to prevent XSS vulnerabilities.
+   * Only pass trusted, safe HTML strings!
+   */
   $.fn.typeahead.defaults = {
     source: []
   , items: 8
