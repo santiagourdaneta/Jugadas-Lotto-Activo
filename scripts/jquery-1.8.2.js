@@ -7456,6 +7456,15 @@ jQuery.fn.load = function( url, params, callback ) {
 		response = arguments;
 
 		// See if a selector was specified
+		// Helper to repeatedly remove <script> tags, preventing incomplete sanitization
+		function removeAllScriptTags(input) {
+			var previous;
+			do {
+				previous = input;
+				input = input.replace(rscript, "");
+			} while (input !== previous);
+			return input;
+		}
 		self.html( selector ?
 
 			// Create a dummy div to hold the results
@@ -7463,7 +7472,7 @@ jQuery.fn.load = function( url, params, callback ) {
 
 				// inject the contents of the document in, removing the scripts
 				// to avoid any 'Permission Denied' errors in IE
-				.append( responseText.replace( rscript, "" ) )
+				.append( removeAllScriptTags(responseText) )
 
 				// Locate the specified elements
 				.find( selector ) :
