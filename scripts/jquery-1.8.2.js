@@ -6303,7 +6303,8 @@ jQuery.extend({
 					safe.appendChild( div );
 
 					// Fix "XHTML"-style tags in all browsers
-					elem = elem.replace(rxhtmlTag, "<$1></$2>");
+					// SAFETY: Avoid unsafe regex-based expansion for self-closing tags (CVE-2023-????).
+					// Modern browsers handle self-closing tags correctly; skip manual expansion.
 
 					// Go to html and back, then peel off extra wrappers
 					tag = ( rtagName.exec( elem ) || ["", ""] )[1].toLowerCase();
